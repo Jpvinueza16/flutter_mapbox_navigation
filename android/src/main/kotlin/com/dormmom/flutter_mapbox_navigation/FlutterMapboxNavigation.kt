@@ -8,13 +8,20 @@ import android.os.Build
 import android.content.Intent
 import androidx.annotation.NonNull
 import com.dormmom.flutter_mapbox_navigation.launcher.MyNavigationLauncher
+import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
+import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -41,6 +48,9 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
     var _simulateRoute: Boolean = false
     var _language: String? = null
     var _units: String? = null
+    var _zoom = 15.0
+    var _bearing = 0.0
+    var _tilt = 0.0
 
     var _distanceRemaining: Double? = null
     var _durationRemaining: Double? = null
@@ -52,78 +62,108 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
 
     var _eventSink:EventChannel.EventSink? = null
 
-    
+    private var locationEngine: LocationEngine? = null
+    private var mapView: MapView
+    private var mapBoxMap: MapboxMap? = null
+    private var navigation: MapboxNavigation
+    private var currentRoute: DirectionsRoute? = null
+
     constructor(context: Context, activity: Activity) {
         this._context = context
         this._activity = activity;
+        val options: MapboxMapOptions = MapboxMapOptions.createFromAttributes(context)
+                .compassEnabled(false)
+                .logoEnabled(true)
+        mapView = MapView(context, options)
+
+        val navigationOptions = MapboxNavigationOptions.Builder()
+                .build()
+
+        navigation = MapboxNavigation(
+                context,
+                Mapbox.getAccessToken()!!,
+                navigationOptions
+        )
     }
+
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result) {
 
+        when(call.method)
+        {
+            "getPlatformVersion" -> {
+                result.success("Android ${android.os.Build.VERSION.RELEASE}")
+            }
+            "getDistanceRemaining" -> {
+                result.success(_distanceRemaining);
+            }
+            "getDurationRemaining" -> {
+                result.success(_durationRemaining);
+            }
+            "startNavigation" -> {
+                startNavigation(call, result)
+            }
+            "startNavigationWithWayPoints" -> {
+                startNavigation(call, result)
+            }
+            "startEmbeddedNavigation" -> {
+                //startEmbeddedNavigation(call, result)
+            }
+            "finishNavigation" -> {
+                MyNavigationLauncher.stopNavigation(_activity)
+            }
+            else -> result.notImplemented()
+        }
+
+    }
+
+    private fun startNavigation(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result)
+    {
         var arguments = call.arguments as? Map<String, Any>
+        var originName = arguments?.get("originName") as? String
+        val originLatitude = arguments?.get("originLatitude") as? Double
+        val originLongitude = arguments?.get("originLongitude") as? Double
 
-        if (call.method == "getPlatformVersion") {
-            result.success("Android ${android.os.Build.VERSION.RELEASE}")
-        }
-        else if(call.method == "getDistanceRemaining")
+        val destinationName = arguments?.get("destinationName") as? String
+        val destinationLatitude = arguments?.get("destinationLatitude") as? Double
+        val destinationLongitude = arguments?.get("destinationLongitude") as? Double
+
+        val navigationMode = arguments?.get("mode") as? String
+        if(navigationMode != null)
+            _navigationMode = navigationMode;
+
+        val simulateRoute = arguments?.get("simulateRoute") as Boolean
+        _simulateRoute = simulateRoute;
+
+        var language = arguments?.get("language") as? String
+        _language = language
+
+        var units = arguments?.get("units") as? String
+        _units = units
+
+
+        if(originLatitude != null && originLongitude != null && destinationLatitude != null && destinationLongitude != null)
         {
-            result.success(_distanceRemaining);
-        }
-        else if(call.method == "getDurationRemaining")
-        {
-            result.success(_durationRemaining);
-        }
-        else if(call.method == "startNavigation")
-        {
-            var originName = arguments?.get("originName") as? String
-            val originLatitude = arguments?.get("originLatitude") as? Double
-            val originLongitude = arguments?.get("originLongitude") as? Double
 
-            val destinationName = arguments?.get("destinationName") as? String
-            val destinationLatitude = arguments?.get("destinationLatitude") as? Double
-            val destinationLongitude = arguments?.get("destinationLongitude") as? Double
+            val origin = Point.fromLngLat(originLongitude, originLatitude)
+            val destination = Point.fromLngLat(destinationLongitude, destinationLatitude)
+            _origin = origin
+            _destination = destination
 
-            val navigationMode = arguments?.get("mode") as? String
-            if(navigationMode != null)
-                _navigationMode = navigationMode;
-
-            val simulateRoute = arguments?.get("simulateRoute") as Boolean
-            _simulateRoute = simulateRoute;
-
-            var language = arguments?.get("language") as? String
-            _language = language
-
-            var units = arguments?.get("units") as? String
-            _units = units
-
-
-            if(originLatitude != null && originLongitude != null && destinationLatitude != null && destinationLongitude != null)
-            {
-
-                val origin = Point.fromLngLat(originLongitude, originLatitude)
-                val destination = Point.fromLngLat(destinationLongitude, destinationLatitude)
-                _origin = origin
-                _destination = destination
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    var haspermission = _activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    if(haspermission != PackageManager.PERMISSION_GRANTED) {
-                        //_activity.onRequestPermissionsResult((a,b,c) => onRequestPermissionsResult)
-                        _activity.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-                        startNavigation(origin, destination, simulateRoute, language, units)
-                    }
-                    else
-                        startNavigation(origin, destination, simulateRoute, language, units)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                var haspermission = _activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                if(haspermission != PackageManager.PERMISSION_GRANTED) {
+                    //_activity.onRequestPermissionsResult((a,b,c) => onRequestPermissionsResult)
+                    _activity.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+                    startNavigation(origin, destination, simulateRoute, language, units)
                 }
                 else
                     startNavigation(origin, destination, simulateRoute, language, units)
-
-
             }
-        } else if(call.method == "finishNavigation") {
-            MyNavigationLauncher.stopNavigation(_activity)
-        } else {
-            result.notImplemented()
+            else
+                startNavigation(origin, destination, simulateRoute, language, units)
+
+
         }
     }
 
@@ -215,7 +255,53 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
 
 
     }
+/*
+    private fun startEmbeddedNavigation(call: MethodCall, result: MethodChannel.Result) {
 
+        var arguments = call.arguments as? Map<String, Any>
+
+        var zoom = arguments?.get("zoom") as? Double
+        if(zoom != null) _zoom = zoom
+
+        var bearing = arguments?.get("bearing") as? Double
+        if(bearing != null) _bearing = bearing
+
+        var tilt = arguments?.get("tilt") as? Double
+        if(tilt != null) _tilt = tilt
+
+        var simulateRoute = arguments?.get("simulateRoute") as Boolean
+        if(simulateRoute != null) _simulateRoute = simulateRoute
+
+        startEmbeddedNavigation()
+
+        if (currentRoute != null) {
+            result.success("Embedded Navigation started.")
+        } else {
+            result.success("No route found. Unable to start navigation.")
+        }
+    }
+
+    private fun startEmbeddedNavigation() {
+        isNavigationCanceled = false
+
+        if (currentRoute != null) {
+            navigation.addOffRouteListener(this@FlutterMapViewFactory)
+            navigation.addFasterRouteListener(this@FlutterMapViewFactory)
+            navigation.addProgressChangeListener(this@FlutterMapViewFactory)
+            navigation.addMilestoneEventListener(this@FlutterMapViewFactory)
+            navigation.addNavigationEventListener(this@FlutterMapViewFactory)
+
+            currentRoute?.let {
+                if (_simulateRoute) {
+                    (locationEngine as ReplayRouteLocationEngine).assign(it)
+                    navigation?.locationEngine = locationEngine as ReplayRouteLocationEngine
+                }
+                isNavigationInProgress = true
+                navigation.startNavigation(it)
+            }
+        }
+    }
+*/
     override fun onListen(args: Any?, events: EventChannel.EventSink?) {
         _eventSink = events;
     }

@@ -63,16 +63,40 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
             
             let language = arguments?["language"] as? String
             let voiceUnits = arguments?["units"] as? String
-            
+            let simulateRoute = arguments?["simulateRoute"] as? Bool ?? false
             let oMode = arguments?["mode"] as? String ?? "drivingWithTraffic"
             _navigationMode = oMode
             
             let origin = Location(name: oName, latitude: oLatitude, longitude: oLongitude)
             let destination = Location(name: dName, latitude: dLatitude, longitude: dLongitude)
             
-            startNavigation(origin: origin, destination: destination, language: language, units: voiceUnits, flutterResult: result)
+            startNavigation(origin: origin, destination: destination, language: language, units: voiceUnits, simulationMode: simulateRoute, flutterResult: result)
         }
-        
+        else if(call.method == "startNavigationWithWayPoints")
+        {
+            guard let oWayPoints = arguments?["wayPoints"] as? NSDictionary else {return}
+            var wayPoints = [Waypoint]()
+            for item in oWayPoints as NSDictionary
+            {
+                let point = item.value as! NSDictionary
+                guard let oName = point["Name"] as? String else {return}
+                guard let oLatitude = point["Latitude"] as? Double else {return}
+                guard let oLongitude = point["Longitude"] as? Double else {return}
+                
+                let location = Waypoint(coordinate: CLLocationCoordinate2D(latitude: oLatitude, longitude: oLongitude), name: oName)
+                wayPoints.append(location)
+            }
+            
+            let language = arguments?["language"] as? String
+            let voiceUnits = arguments?["units"] as? String
+            let simulateRoute = arguments?["simulateRoute"] as? Bool ?? false
+            let oMode = arguments?["mode"] as? String ?? "drivingWithTraffic"
+            _navigationMode = oMode
+            
+            
+            startNavigationWithWayPoints(wayPoints: wayPoints, language: language, units: voiceUnits, simulationMode: simulateRoute, flutterResult: result)
+        }
+      
         result("iOS " + UIDevice.current.systemVersion)
     }
     
@@ -82,7 +106,15 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
         startNavigation(route: route, options: self._options!)
     }
     
-    func startNavigation(origin: Location, destination: Location, language: String?, units: String?, simulationMode: Bool = false, flutterResult: @escaping FlutterResult)
+ 
+    func startNavigation(origin: Location, destination: Location, language: String?, units: String?, simulationMode: Bool = false, flutterResult: @escaping FlutterResult){
+        
+        let o = Waypoint(coordinate: CLLocationCoordinate2D(latitude: origin.latitude, longitude: origin.longitude), name: origin.name)
+        let d = Waypoint(coordinate: CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude), name: destination.name)
+        startNavigationWithWayPoints(wayPoints: [o, d], language: language, units: units, simulationMode: simulationMode, flutterResult: flutterResult)
+    }
+    
+    func startNavigationWithWayPoints(wayPoints: [Waypoint], language: String?, units: String?, simulationMode: Bool = false, flutterResult: @escaping FlutterResult)
     {
         var mode: DirectionsProfileIdentifier = .automobileAvoidingTraffic
         
@@ -99,10 +131,7 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
             mode = .walking
         }
         
-        let o = Waypoint(coordinate: CLLocationCoordinate2D(latitude: origin.latitude, longitude: origin.longitude), name: origin.name)
-        let d = Waypoint(coordinate: CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude), name: destination.name)
-        
-        let options = NavigationRouteOptions(waypoints: [o, d], profileIdentifier: mode)
+        let options = NavigationRouteOptions(waypoints: wayPoints, profileIdentifier: mode)
         
         if(units != nil)
         {

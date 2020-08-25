@@ -2,13 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="040c80fd-187c-47c9-866a-867a3669b8e3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/example/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/android/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Flutter/flutter_export_environment.sh" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/flutter_mapbox_navigation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/flutter_mapbox_navigation.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/flutter_export_environment.sh" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_mapbox_navigation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_mapbox_navigation.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftFlutterMapboxNavigationPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftFlutterMapboxNavigationPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_mapbox_navigation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_mapbox_navigation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/wayPoint.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/wayPoint.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,61 +63,69 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1638" height="360" key="GridCell.Tab.0.bottom" timestamp="1593802889799">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.0.bottom" timestamp="1598179720529">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1702" height="273" key="GridCell.Tab.0.bottom/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022756" />
     <state width="1638" height="360" key="GridCell.Tab.0.bottom/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.bottom/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
     <state width="1638" height="251" key="GridCell.Tab.0.bottom/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905644" />
+    <state width="1707" height="313" key="GridCell.Tab.0.bottom/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720529" />
     <state width="1702" height="337" key="GridCell.Tab.0.bottom/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993125" />
-    <state width="1638" height="360" key="GridCell.Tab.0.center" timestamp="1593802889798">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.0.center" timestamp="1598179720529">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1702" height="273" key="GridCell.Tab.0.center/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022756" />
     <state width="1638" height="360" key="GridCell.Tab.0.center/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.center/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889798" />
     <state width="1638" height="251" key="GridCell.Tab.0.center/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905644" />
+    <state width="1707" height="313" key="GridCell.Tab.0.center/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720529" />
     <state width="1702" height="337" key="GridCell.Tab.0.center/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993124" />
-    <state width="1638" height="360" key="GridCell.Tab.0.left" timestamp="1593802889798">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.0.left" timestamp="1598179720528">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1702" height="273" key="GridCell.Tab.0.left/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022755" />
     <state width="1638" height="360" key="GridCell.Tab.0.left/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.left/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889798" />
     <state width="1638" height="251" key="GridCell.Tab.0.left/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905643" />
+    <state width="1707" height="313" key="GridCell.Tab.0.left/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720528" />
     <state width="1702" height="337" key="GridCell.Tab.0.left/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993124" />
-    <state width="1638" height="360" key="GridCell.Tab.0.right" timestamp="1593802889798">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.0.right" timestamp="1598179720529">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1702" height="273" key="GridCell.Tab.0.right/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022756" />
     <state width="1638" height="360" key="GridCell.Tab.0.right/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.right/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889798" />
     <state width="1638" height="251" key="GridCell.Tab.0.right/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905644" />
+    <state width="1707" height="313" key="GridCell.Tab.0.right/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720529" />
     <state width="1702" height="337" key="GridCell.Tab.0.right/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993124" />
-    <state width="1638" height="360" key="GridCell.Tab.1.bottom" timestamp="1593802889799">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.1.bottom" timestamp="1598179720470">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1638" height="360" key="GridCell.Tab.1.bottom/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.bottom/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
+    <state width="1707" height="313" key="GridCell.Tab.1.bottom/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720470" />
     <state width="1702" height="337" key="GridCell.Tab.1.bottom/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993126" />
-    <state width="1638" height="360" key="GridCell.Tab.1.center" timestamp="1593802889799">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.1.center" timestamp="1598179720470">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1638" height="360" key="GridCell.Tab.1.center/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.center/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
+    <state width="1707" height="313" key="GridCell.Tab.1.center/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720470" />
     <state width="1702" height="337" key="GridCell.Tab.1.center/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993125" />
-    <state width="1638" height="360" key="GridCell.Tab.1.left" timestamp="1593802889799">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.1.left" timestamp="1598179720469">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1638" height="360" key="GridCell.Tab.1.left/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.left/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
+    <state width="1707" height="313" key="GridCell.Tab.1.left/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720469" />
     <state width="1702" height="337" key="GridCell.Tab.1.left/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993125" />
-    <state width="1638" height="360" key="GridCell.Tab.1.right" timestamp="1593802889799">
-      <screen x="0" y="23" width="2560" height="1340" />
+    <state width="1707" height="313" key="GridCell.Tab.1.right" timestamp="1598179720470">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1638" height="360" key="GridCell.Tab.1.right/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.right/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
+    <state width="1707" height="313" key="GridCell.Tab.1.right/0.23.5120.1333@0.23.5120.1333" timestamp="1598179720470" />
     <state width="1702" height="337" key="GridCell.Tab.1.right/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993126" />
   </component>
 </project>

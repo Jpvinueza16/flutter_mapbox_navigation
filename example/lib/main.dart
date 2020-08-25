@@ -79,11 +79,17 @@ class _MyAppState extends State<MyApp> {
             RaisedButton(
               child: Text("Start Navigation"),
               onPressed: () async {
-                await _directions.startNavigation(
-                    origin: _origin,
-                    destination: _destination,
+                
+                var wayPoints = List<WayPoint>();
+                wayPoints.add(_origin);
+                wayPoints.add(_destination);
+                wayPoints.add(_origin);
+
+                await _directions.startNavigationWithWayPoints(
+                    wayPoints: wayPoints,
                     mode: MapBoxNavigationMode.drivingWithTraffic,
-                    simulateRoute: true, language: "German", units: VoiceUnits.metric);
+                    simulateRoute: true, language: "en", units: VoiceUnits.metric);
+                
               },
             ),
             SizedBox(

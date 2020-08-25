@@ -81,6 +81,58 @@ class MapboxNavigation {
     _routeProgressSubscription = _streamRouteProgress.listen(_onProgressData);
   }
 
+  ///Show the Navigation View and Begins Direction Routing
+  ///
+  /// [WayPoints] must not be null. A collection of [WayPoint](longitude, latitude and name). Must be at least 2 or at most 25
+  /// [mode] defaults to drivingWithTraffic
+  /// [simulateRoute] if true will simulate the route as if you were driving. Always true on iOS Simulator
+  /// [language] this property affects the sentence contained within the RouteStep.instructions property, but it does not affect any road names contained in that property or other properties such as RouteStep.name. Defaults to "en" if an unsupported language is specified. The languages in this link are supported: https://docs.mapbox.com/android/navigation/overview/localization/ or https://docs.mapbox.com/ios/api/navigation/0.14.1/localization-and-internationalization.html
+  ///
+  /// Begins to generate Route Progress
+  ///
+  Future startNavigationWithWayPoints(
+      {List<WayPoint> wayPoints,
+        MapBoxNavigationMode mode = MapBoxNavigationMode.drivingWithTraffic,
+        bool simulateRoute = false, String language, VoiceUnits units}) async {
+
+    assert(wayPoints != null);
+    assert(wayPoints.length > 1);
+    assert(wayPoints.length > 1);
+    
+    var pointList = List<Map<String, Object>>();
+
+    for(int i = 0; i < wayPoints.length; i++)
+    {
+      var wayPoint = wayPoints[i];
+      assert(wayPoint != null);
+      assert(wayPoint.name != null);
+      assert(wayPoint.latitude != null);
+      assert(wayPoint.longitude != null);
+
+      final pointMap  = <String, dynamic>{
+        "Order": i,
+        "Name": wayPoint.name,
+        "Latitude": wayPoint.latitude,
+        "Longitude": wayPoint.longitude,
+      };
+       pointList.add(pointMap);
+    }
+    var i = 0;
+    var wayPointMap = Map.fromIterable(pointList, key: (e) => i++, value: (e) => e);
+
+    final Map<String, Object> args = <String, dynamic>{
+      "wayPoints" : wayPointMap,
+      "mode": mode.toString().split('.').last,
+      "simulateRoute": simulateRoute,
+      "language" : language,
+      "units" : units?.toString()?.split('.')?.last
+    };
+
+    await _methodChannel.invokeMethod('startNavigationWithWayPoints', args);
+    _routeProgressSubscription = _streamRouteProgress.listen(_onProgressData);
+
+  }
+
   ///Ends Navigation and Closes the Navigation View
   Future<bool> finishNavigation() async {
     var success = await _methodChannel.invokeMethod('finishNavigation', null);
