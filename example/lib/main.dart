@@ -13,9 +13,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _origin = WayPoint(name: "City Hall", latitude: 42.886448, longitude: -78.878372);
-  final _destination = WayPoint(name: "Downtown Buffalo", latitude: 42.8866177, longitude: -78.8814924);
-
+  final _origin = WayPoint(name: "My Home", latitude: 42.944719, longitude: -78.7931947);
+  final _stop1 = WayPoint(name: "Brew Pub", latitude: 42.8925713, longitude: -78.6806405);
+  final _stop2 = WayPoint(name: "Catalyst Fitness", latitude: 42.9328275, longitude: -78.7172975);
+  final _stop3 = WayPoint(name: "Mini Mart", latitude: 42.81957, longitude: -78.8286187);
+  final _cornell = WayPoint(name: "Cornell University", latitude: 42.4534492, longitude: -76.4756914);
   MapboxNavigation _directions;
   bool _arrived = false;
   double _distanceRemaining, _durationRemaining;
@@ -33,14 +35,14 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    _directions = MapboxNavigation(onRouteProgress: (arrived) async {
+    _directions = MapboxNavigation(onRouteProgress: (e) async {
       _distanceRemaining = await _directions.distanceRemaining;
       _durationRemaining = await _directions.durationRemaining;
 
       setState(() {
-        _arrived = arrived;
+        _arrived = e.arrived;
       });
-      if (arrived)
+      if (e.arrived)
         {
           await Future.delayed(Duration(seconds: 3));
           await _directions.finishNavigation();
@@ -77,12 +79,25 @@ class _MyAppState extends State<MyApp> {
               height: 60,
             ),
             RaisedButton(
-              child: Text("Start Navigation"),
+              child: Text("Start  Navigation"),
+              onPressed: () async {
+
+                await _directions.startNavigation(origin: _origin, destination: _cornell,
+                    mode: MapBoxNavigationMode.drivingWithTraffic,
+                    simulateRoute: true, language: "en", units: VoiceUnits.metric);
+
+              },
+            ),
+            SizedBox(height: 30,),
+            RaisedButton(
+              child: Text("Start Multi Stop Navigation"),
               onPressed: () async {
                 
                 var wayPoints = List<WayPoint>();
                 wayPoints.add(_origin);
-                wayPoints.add(_destination);
+                wayPoints.add(_stop1);
+                wayPoints.add(_stop2);
+                wayPoints.add(_stop3);
                 wayPoints.add(_origin);
 
                 await _directions.startNavigationWithWayPoints(

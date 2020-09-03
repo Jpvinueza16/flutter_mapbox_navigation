@@ -10,12 +10,14 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
     var _navigationViewController: NavigationViewController? = nil
     var _eventSink: FlutterEventSink? = nil
     
+    let ALLOW_ROUTE_SELECTION: Bool = false
     var _distanceRemaining: Double?
     var _durationRemaining: Double?
     var _navigationMode: String?
     var _routes: [Route]?
     var _waypoints: [Waypoint]?
     var _options: NavigationRouteOptions?
+    var _simulateRoute: Bool = false
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_mapbox_navigation", binaryMessenger: registrar.messenger())
@@ -63,14 +65,14 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
             
             let language = arguments?["language"] as? String
             let voiceUnits = arguments?["units"] as? String
-            let simulateRoute = arguments?["simulateRoute"] as? Bool ?? false
+            _simulateRoute = arguments?["simulateRoute"] as? Bool ?? false
             let oMode = arguments?["mode"] as? String ?? "drivingWithTraffic"
             _navigationMode = oMode
             
             let origin = Location(name: oName, latitude: oLatitude, longitude: oLongitude)
             let destination = Location(name: dName, latitude: dLatitude, longitude: dLongitude)
             
-            startNavigation(origin: origin, destination: destination, language: language, units: voiceUnits, simulationMode: simulateRoute, flutterResult: result)
+            startNavigation(origin: origin, destination: destination, language: language, units: voiceUnits, simulateRoute: _simulateRoute, flutterResult: result)
         }
         else if(call.method == "startNavigationWithWayPoints")
         {
@@ -89,12 +91,12 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
             
             let language = arguments?["language"] as? String
             let voiceUnits = arguments?["units"] as? String
-            let simulateRoute = arguments?["simulateRoute"] as? Bool ?? false
+            _simulateRoute = arguments?["simulateRoute"] as? Bool ?? false
             let oMode = arguments?["mode"] as? String ?? "drivingWithTraffic"
             _navigationMode = oMode
             
             
-            startNavigationWithWayPoints(wayPoints: wayPoints, language: language, units: voiceUnits, simulationMode: simulateRoute, flutterResult: result)
+            startNavigationWithWayPoints(wayPoints: wayPoints, language: language, units: voiceUnits, simulateRoute:  _simulateRoute, flutterResult: result)
         }
       
         result("iOS " + UIDevice.current.systemVersion)
@@ -103,19 +105,25 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
     func startNavigation(routeIdentifier: String, flutterResult: @escaping FlutterResult)
     {
         guard let route = self._routes?.first(where: { $0.routeIdentifier == routeIdentifier}) else {return}
-        startNavigation(route: route, options: self._options!)
+        let simulationMode: SimulationMode = _simulateRoute ? .always : .never
+        let options = self._options!
+        let navigationService = MapboxNavigationService(route: route, routeOptions: options, simulating: simulationMode)
+        let navigationOptions = NavigationOptions(navigationService: navigationService)
+        startNavigation(route: route, options: options, navOptions: navigationOptions)
     }
     
  
-    func startNavigation(origin: Location, destination: Location, language: String?, units: String?, simulationMode: Bool = false, flutterResult: @escaping FlutterResult){
+    func startNavigation(origin: Location, destination: Location, language: String?, units: String?, simulateRoute: Bool = false, flutterResult: @escaping FlutterResult){
         
-        let o = Waypoint(coordinate: CLLocationCoordinate2D(latitude: origin.latitude, longitude: origin.longitude), name: origin.name)
-        let d = Waypoint(coordinate: CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude), name: destination.name)
-        startNavigationWithWayPoints(wayPoints: [o, d], language: language, units: units, simulationMode: simulationMode, flutterResult: flutterResult)
+        let o = Waypoint(coordinate: CLLocationCoordinate2D(latitude: origin.latitude!, longitude: origin.longitude!), name: origin.name)
+        let d = Waypoint(coordinate: CLLocationCoordinate2D(latitude: destination.latitude!, longitude: destination.longitude!), name: destination.name)
+        startNavigationWithWayPoints(wayPoints: [o, d], language: language, units: units, simulateRoute: simulateRoute, flutterResult: flutterResult)
     }
     
-    func startNavigationWithWayPoints(wayPoints: [Waypoint], language: String?, units: String?, simulationMode: Bool = false, flutterResult: @escaping FlutterResult)
+    func startNavigationWithWayPoints(wayPoints: [Waypoint], language: String?, units: String?, simulateRoute: Bool = false, flutterResult: @escaping FlutterResult)
     {
+        let simulationMode: SimulationMode = simulateRoute ? .always : .never
+        
         var mode: DirectionsProfileIdentifier = .automobileAvoidingTraffic
         
         if (_navigationMode == "cycling")
@@ -132,6 +140,7 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
         }
         
         let options = NavigationRouteOptions(waypoints: wayPoints, profileIdentifier: mode)
+        //options.allowsUTurnAtWaypoint
         
         if(units != nil)
         {
@@ -146,35 +155,40 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
         Directions.shared.calculate(options) { [weak self](session, result) in
             switch result {
             case .failure(let error):
-                flutterResult(error.localizedDescription)
+                flutterResult("An error occured while calculating the route \(error.localizedDescription)")
             case .success(let response):
                 guard let routes = response.routes, let strongSelf = self else { return }
                 //if more than one route found, give user option to select one
-                /*if(routes.count > 1)
+                
+                if(routes.count > 1 && strongSelf.ALLOW_ROUTE_SELECTION)
                 {
                    //show map to select a specific route
                     strongSelf._routes = routes
                     strongSelf._options = options
-                    let routeOptionsView = RouteOptionsViewController(routes: routes, options: options);
+                    let routeOptionsView = RouteOptionsViewController(routes: routes, options: options)
                     
                     let flutterViewController = UIApplication.shared.delegate?.window??.rootViewController as! FlutterViewController
                     flutterViewController.present(routeOptionsView, animated: true, completion: nil)
                 }
                 else
                 {
-                    strongSelf.startNavigation(route: routes.first!, options: options)
-                }*/
-                strongSelf.startNavigation(route: routes.first!, options: options)
+                    let route = routes.first!
+                    let navigationService = MapboxNavigationService(route: route, routeOptions: options, simulating: simulationMode)
+                    let navigationOptions = NavigationOptions(navigationService: navigationService)
+                    strongSelf.startNavigation(route: route, options: options, navOptions: navigationOptions)
+                }
+                //strongSelf.startNavigation(route: routes.first!, options: options)
             }
         }
         
     }
     
-    func startNavigation(route: Route, options: NavigationRouteOptions)
+    func startNavigation(route: Route, options: NavigationRouteOptions, navOptions: NavigationOptions)
     {
         if(self._navigationViewController == nil)
         {
-            self._navigationViewController = NavigationViewController(for: route, routeOptions: options)
+            self._navigationViewController = NavigationViewController(for: route, routeOptions: options, navigationOptions: navOptions)
+            self._navigationViewController!.modalPresentationStyle = .fullScreen
             self._navigationViewController!.delegate = self
             self._navigationViewController!.mapView?.localizeLabels()
         }
@@ -204,8 +218,12 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
         //_currentLegDescription =  progress.currentLeg.description
         if(_eventSink != nil)
         {
-            let arrived = progress.isFinalLeg && progress.currentLegProgress.userHasArrivedAtWaypoint
-            _eventSink!(arrived)
+            
+            let progressEvent = MapBoxRouteProgressEvent(progress: progress)
+            let jsonEncoder = JSONEncoder()
+            let jsonData = try! jsonEncoder.encode(progressEvent)
+            let eventJson = String(data: jsonData, encoding: String.Encoding.utf8)
+            _eventSink!(eventJson)
             
         }
     }
@@ -225,17 +243,100 @@ public class SwiftFlutterMapboxNavigationPlugin: NSObject, FlutterPlugin, Flutte
     }
 }
 
-public class Location
+public class Location : Codable
 {
     let name: String
-    let latitude: Double
-    let longitude: Double
+    let latitude: Double?
+    let longitude: Double?
     
-    init(name: String, latitude: Double, longitude: Double) {
+    init(name: String, latitude: Double?, longitude: Double?) {
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
     }
+}
+
+public class MapBoxRouteLeg : Codable
+{
+    let profileIdentifier: String
+    let name: String
+    let distance: Double
+    let expectedTravelTime: Double
+    let source: Location
+    let destination: Location
+    var steps: [MapBoxRouteStep] = []
+    
+    init(leg: RouteLeg) {
+        profileIdentifier = leg.profileIdentifier.rawValue
+        name = leg.name
+        distance = leg.distance
+        expectedTravelTime = leg.expectedTravelTime
+        source = Location(name: leg.source?.name ?? "source", latitude: leg.source?.coordinate.latitude, longitude: leg.source?.coordinate.longitude)
+        destination = Location(name: leg.destination?.name ?? "source", latitude: leg.destination?.coordinate.latitude, longitude: leg.destination?.coordinate.longitude)
+        for step in leg.steps {
+            steps.append(MapBoxRouteStep(step: step))
+        }
+    }
+}
+
+public class MapBoxRouteStep : Codable
+{
+    let name: String?
+    let instructions: String
+    let distance: Double
+    let expectedTravelTime: Double
+    
+    init(step: RouteStep){
+        name = step.names?.first
+        instructions = step.instructions
+        distance = step.distance
+        expectedTravelTime = step.expectedTravelTime
+    }
+}
+
+
+public class MapBoxRouteProgressEvent : Codable
+{
+    let arrived: Bool
+    let distance: Double
+    let duration: Double
+    let distanceTraveled: Double
+    let currentLegDistanceTraveled: Double
+    let currentLegDistanceRemaining: Double
+    let currentStepInstruction: String
+    let legIndex: Int
+    let stepIndex: Int
+    let currentLeg: MapBoxRouteLeg
+    var priorLeg: MapBoxRouteLeg? = nil
+    var remainingLegs: [MapBoxRouteLeg] = []
+
+    init(progress: RouteProgress) {
+
+        arrived = progress.isFinalLeg && progress.currentLegProgress.userHasArrivedAtWaypoint
+        distance = progress.distanceRemaining
+        distanceTraveled = progress.distanceTraveled
+        duration = progress.durationRemaining
+        legIndex = progress.legIndex
+        stepIndex = progress.currentLegProgress.stepIndex
+
+        currentLeg = MapBoxRouteLeg(leg: progress.currentLeg)
+        
+        if(progress.priorLeg != nil)
+        {
+            priorLeg = MapBoxRouteLeg(leg: progress.priorLeg!)
+        }
+
+        for leg in progress.remainingLegs
+        {
+            remainingLegs.append(MapBoxRouteLeg(leg: leg))
+        }
+        
+        currentLegDistanceTraveled = progress.currentLegProgress.distanceTraveled
+        currentLegDistanceRemaining = progress.currentLegProgress.distanceRemaining
+        currentStepInstruction = progress.currentLegProgress.currentStep.description
+    }
+
+
 }
 
 public class FlutterMapboxNavigationViewFactory : NSObject, FlutterPlatformViewFactory
@@ -259,7 +360,7 @@ public class FlutterMapboxNavigationView : NSObject, FlutterPlatformView
     {
         self.frame = frame
         self.viewId = viewId
-        self.arguments = args as? NSDictionary;
+        self.arguments = args as? NSDictionary
     }
     
     public func view() -> UIView
@@ -279,8 +380,8 @@ public class FlutterMapboxNavigationView : NSObject, FlutterPlatformView
         
         let origin = Location(name: oName, latitude: oLatitude, longitude: oLongitude)
         let destination = Location(name: dName, latitude: dLatitude, longitude: dLongitude)
-        let o = Waypoint(coordinate: CLLocationCoordinate2D(latitude: origin.latitude, longitude: origin.longitude), name: origin.name)
-        let d = Waypoint(coordinate: CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude), name: destination.name)
+        let o = Waypoint(coordinate: CLLocationCoordinate2D(latitude: origin.latitude!, longitude: origin.longitude!), name: origin.name)
+        let d = Waypoint(coordinate: CLLocationCoordinate2D(latitude: destination.latitude!, longitude: destination.longitude!), name: destination.name)
         
         let options = NavigationRouteOptions(waypoints: [o, d])
         if(units != nil)
@@ -300,9 +401,10 @@ public class FlutterMapboxNavigationView : NSObject, FlutterPlatformView
                 print(error.localizedDescription)
             case .success(let response):
                 guard let route = response.routes?.first else { return }
-                let nav = NavigationViewController(for: route, routeOptions: options)
-                navView = nav.view
-                nav.navigationService.start()
+                let viewController = NavigationViewController(for: route, routeOptions: options)
+                navView = viewController.view
+                viewController.navigationService.start()
+
             }
             
         }
@@ -320,7 +422,7 @@ public class RouteOptionsViewController : UIViewController, MGLMapViewDelegate
     
     init(routes: [Route], options: NavigationRouteOptions)
     {
-        self.routes = routes;
+        self.routes = routes
         self.routeOptions = options
         super.init(nibName: nil, bundle: nil)
     }

@@ -2,7 +2,7 @@ part of navigation;
 
 /// Turn-By-Turn Navigation Provider
 class MapboxNavigation {
-  factory MapboxNavigation({ValueSetter<bool> onRouteProgress}) {
+  factory MapboxNavigation({ValueSetter<RouteEvent> onRouteProgress}) {
     if (_instance == null) {
       final MethodChannel methodChannel =
           const MethodChannel('flutter_mapbox_navigation');
@@ -22,10 +22,10 @@ class MapboxNavigation {
 
   final MethodChannel _methodChannel;
   final EventChannel _routeProgressEventchannel;
-  final ValueSetter<bool> _routeProgressNotifier;
+  final ValueSetter<RouteEvent> _routeProgressNotifier;
 
-  Stream<bool> _onRouteProgress;
-  StreamSubscription<bool> _routeProgressSubscription;
+  Stream<RouteEvent> _onRouteProgress;
+  StreamSubscription<RouteEvent> _routeProgressSubscription;
 
   ///Current Device OS Version
   Future<String> get platformVersion => _methodChannel
@@ -48,8 +48,8 @@ class MapboxNavigation {
   /// [destination] must not be null. It must have a longitude, latitude and name.
   /// [mode] defaults to drivingWithTraffic
   /// [simulateRoute] if true will simulate the route as if you were driving. Always true on iOS Simulator
-  /// [language] this property affects the sentence contained within the RouteStep.instructions property, but it does not affect any road names contained in that property or other properties such as RouteStep.name. Defaults to "en" if an unsupported language is specified. The languages in this link are supported: https://docs.mapbox.com/android/navigation/overview/localization/ or https://docs.mapbox.com/ios/api/navigation/0.14.1/localization-and-internationalization.html
-  ///
+  /// [language] 2-letter ISO 639-1 code for language. This property affects the sentence contained within the RouteStep.instructions property, but it does not affect any road names contained in that property or other properties such as RouteStep.name. Defaults to "en" if an unsupported language is specified. The languages in this link are supported: https://docs.mapbox.com/android/navigation/overview/localization/ or https://docs.mapbox.com/ios/api/navigation/0.14.1/localization-and-internationalization.html
+  /// 
   /// Begins to generate Route Progress
   ///
   Future startNavigation(
@@ -77,7 +77,7 @@ class MapboxNavigation {
       "language" : language,
       "units" : units?.toString()?.split('.')?.last
     };
-    await _methodChannel.invokeMethod('startNavigation', args);
+    await _methodChannel.invokeMethod('startNavigation', args).then<String>((dynamic result) => result);
     _routeProgressSubscription = _streamRouteProgress.listen(_onProgressData);
   }
 
@@ -86,14 +86,14 @@ class MapboxNavigation {
   /// [WayPoints] must not be null. A collection of [WayPoint](longitude, latitude and name). Must be at least 2 or at most 25
   /// [mode] defaults to drivingWithTraffic
   /// [simulateRoute] if true will simulate the route as if you were driving. Always true on iOS Simulator
-  /// [language] this property affects the sentence contained within the RouteStep.instructions property, but it does not affect any road names contained in that property or other properties such as RouteStep.name. Defaults to "en" if an unsupported language is specified. The languages in this link are supported: https://docs.mapbox.com/android/navigation/overview/localization/ or https://docs.mapbox.com/ios/api/navigation/0.14.1/localization-and-internationalization.html
-  ///
+  /// [language] 2-letter ISO 639-1 code for language. This property affects the sentence contained within the RouteStep.instructions property, but it does not affect any road names contained in that property or other properties such as RouteStep.name. Defaults to "en" if an unsupported language is specified. The languages in this link are supported: https://docs.mapbox.com/android/navigation/overview/localization/ or https://docs.mapbox.com/ios/api/navigation/0.14.1/localization-and-internationalization.html
+  /// [isOptimized] if true, will reorder the routes to optimize navigation for time and shortest distance using the Travelling Salesman Algorithm. Always false for now
   /// Begins to generate Route Progress
   ///
   Future startNavigationWithWayPoints(
       {List<WayPoint> wayPoints,
         MapBoxNavigationMode mode = MapBoxNavigationMode.drivingWithTraffic,
-        bool simulateRoute = false, String language, VoiceUnits units}) async {
+        bool simulateRoute = false, String language, VoiceUnits units, bool isOptimized = false}) async {
 
     assert(wayPoints != null);
     assert(wayPoints.length > 1);
@@ -128,7 +128,8 @@ class MapboxNavigation {
       "units" : units?.toString()?.split('.')?.last
     };
 
-    await _methodChannel.invokeMethod('startNavigationWithWayPoints', args);
+    await _methodChannel.invokeMethod('startNavigationWithWayPoints', args)
+        .then<String>((dynamic result) => result);
     _routeProgressSubscription = _streamRouteProgress.listen(_onProgressData);
 
   }
@@ -139,23 +140,24 @@ class MapboxNavigation {
     return success;
   }
 
-  void _onProgressData(bool arrived) {
-    if (_routeProgressNotifier != null) _routeProgressNotifier(arrived);
+  void _onProgressData(RouteEvent event) {
+    if (_routeProgressNotifier != null) _routeProgressNotifier(event);
 
-    if (arrived) _routeProgressSubscription.cancel();
+    if (event.arrived) _routeProgressSubscription.cancel();
   }
 
-  Stream<bool> get _streamRouteProgress {
+  Stream<RouteEvent> get _streamRouteProgress {
     if (_onRouteProgress == null) {
       _onRouteProgress = _routeProgressEventchannel
           .receiveBroadcastStream()
-          .map((dynamic event) => _parseArrivalState(event));
+          .map((dynamic event) => _parseRouteEvent(event));
     }
     return _onRouteProgress;
   }
 
-  bool _parseArrivalState(bool state) {
-    return state;
+  RouteEvent _parseRouteEvent(String jsonString) {
+    var event = RouteEvent.fromJson(json.decode(jsonString));
+    return event;
   }
 }
 
