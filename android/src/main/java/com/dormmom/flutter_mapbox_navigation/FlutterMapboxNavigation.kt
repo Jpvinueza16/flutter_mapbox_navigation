@@ -3,11 +3,14 @@ package com.dormmom.flutter_mapbox_navigation
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.content.Intent
 import androidx.annotation.NonNull
-import com.dormmom.flutter_mapbox_navigation.launcher.MyNavigationLauncher
+import com.dormmom.flutter_mapbox_navigation.activity.MyNavigationLauncher
+import com.dormmom.flutter_mapbox_navigation.activity.NavigationActivity
+import com.dormmom.flutter_mapbox_navigation.activity.WayPointsNavigationActivity
+import com.dormmom.flutter_mapbox_navigation.utilities.PluginUtilities
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsResponse
@@ -17,50 +20,33 @@ import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
-import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.PluginRegistry
-import okhttp3.Route
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Serializable
 import java.util.*
+import kotlin.collections.HashMap
 
-class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
+class FlutterMapboxNavigation(context: Context, activity: Activity, messenger: BinaryMessenger) : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 {
-    
+    private var currentActivity: Activity? = activity
+    private var currentContext: Context = context
+    private var binaryMessenger: BinaryMessenger = messenger
 
-    var _activity: Activity
-    var _context: Context
-
-    var _origin: Point? = null
-    var _destination: Point? = null
-    var _navigationMode: String? =  "drivingWithTraffic"
-    var _simulateRoute: Boolean = false
-    var _language: String? = null
-    var _units: String? = null
-    var _zoom = 15.0
-    var _bearing = 0.0
-    var _tilt = 0.0
 
     var _distanceRemaining: Double? = null
     var _durationRemaining: Double? = null
 
-    var PERMISSION_REQUEST_CODE: Int = 367
-
     lateinit var routes : List<DirectionsRoute>
     val EXTRA_ROUTES = "com.example.myfirstapp.MESSAGE"
-
-    var _eventSink:EventChannel.EventSink? = null
 
     private var locationEngine: LocationEngine? = null
     private var mapView: MapView
@@ -68,17 +54,33 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
     private var navigation: MapboxNavigation
     private var currentRoute: DirectionsRoute? = null
 
-    constructor(context: Context, activity: Activity) {
-        this._context = context
-        this._activity = activity;
+    companion object{
+
+        var eventSink:EventChannel.EventSink? = null
+
+        var PERMISSION_REQUEST_CODE: Int = 367
+
+        var origin: Point? = null
+        var destination: Point? = null
+        var navigationMode =  DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
+        var simulateRoute = false
+        var navigationLanguage = Locale("en")
+        var navigationVoiceUnits = DirectionsCriteria.IMPERIAL
+        var zoom = 15.0
+        var bearing = 0.0
+        var tilt = 0.0
+
+    }
+
+    init {
         val options: MapboxMapOptions = MapboxMapOptions.createFromAttributes(context)
                 .compassEnabled(false)
                 .logoEnabled(true)
+        var accessToken = PluginUtilities.getResourceFromContext(currentContext, "mapbox_access_token")
+        Mapbox.getInstance(currentContext, accessToken)
         mapView = MapView(context, options)
-
         val navigationOptions = MapboxNavigationOptions.Builder()
                 .build()
-
         navigation = MapboxNavigation(
                 context,
                 Mapbox.getAccessToken()!!,
@@ -101,117 +103,123 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
                 result.success(_durationRemaining);
             }
             "startNavigation" -> {
-                startNavigation(call, result)
+                startNavigation(call, result, false)
             }
             "startNavigationWithWayPoints" -> {
-                startNavigation(call, result)
+                startNavigation(call, result, true)
+
             }
             "startEmbeddedNavigation" -> {
                 //startEmbeddedNavigation(call, result)
             }
             "finishNavigation" -> {
-                MyNavigationLauncher.stopNavigation(_activity)
+                MyNavigationLauncher.stopNavigation(currentActivity)
             }
             else -> result.notImplemented()
         }
 
     }
 
-    private fun startNavigation(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result)
+    private fun startNavigation(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result, isMultiStop: Boolean)
     {
         var arguments = call.arguments as? Map<String, Any>
-        var originName = arguments?.get("originName") as? String
-        val originLatitude = arguments?.get("originLatitude") as? Double
-        val originLongitude = arguments?.get("originLongitude") as? Double
 
-        val destinationName = arguments?.get("destinationName") as? String
-        val destinationLatitude = arguments?.get("destinationLatitude") as? Double
-        val destinationLongitude = arguments?.get("destinationLongitude") as? Double
+        val navMode = arguments?.get("mode") as? String
+        if(navMode != null)
+        {
+            if(navMode == "walking")
+                navigationMode = DirectionsCriteria.PROFILE_WALKING;
+            else if(navMode == "cycling")
+                navigationMode = DirectionsCriteria.PROFILE_CYCLING;
+            else if(navMode == "driving")
+                navigationMode = DirectionsCriteria.PROFILE_DRIVING;
+        }
 
-        val navigationMode = arguments?.get("mode") as? String
-        if(navigationMode != null)
-            _navigationMode = navigationMode;
-
-        val simulateRoute = arguments?.get("simulateRoute") as Boolean
-        _simulateRoute = simulateRoute;
+        val simulated = arguments?.get("simulateRoute") as? Boolean
+        if (simulated != null) {
+            simulateRoute = simulated
+        }
 
         var language = arguments?.get("language") as? String
-        _language = language
+        if(language != null)
+            navigationLanguage = Locale(language)
 
         var units = arguments?.get("units") as? String
-        _units = units
 
-
-        if(originLatitude != null && originLongitude != null && destinationLatitude != null && destinationLongitude != null)
-        {
-
-            val origin = Point.fromLngLat(originLongitude, originLatitude)
-            val destination = Point.fromLngLat(destinationLongitude, destinationLatitude)
-            _origin = origin
-            _destination = destination
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                var haspermission = _activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                if(haspermission != PackageManager.PERMISSION_GRANTED) {
-                    //_activity.onRequestPermissionsResult((a,b,c) => onRequestPermissionsResult)
-                    _activity.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-                    startNavigation(origin, destination, simulateRoute, language, units)
-                }
-                else
-                    startNavigation(origin, destination, simulateRoute, language, units)
-            }
-            else
-                startNavigation(origin, destination, simulateRoute, language, units)
-
-
-        }
-    }
-
-    fun startNavigation(origin: Point, destination: Point, simulateRoute: Boolean, language: String?, units: String?)
-    {
-        var navigationMode = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
-        if(_navigationMode == "walking")
-            navigationMode = DirectionsCriteria.PROFILE_WALKING;
-        else if(_navigationMode == "cycling")
-            navigationMode = DirectionsCriteria.PROFILE_CYCLING;
-        else if(_navigationMode == "driving")
-            navigationMode = DirectionsCriteria.PROFILE_DRIVING;
-
-        var accessToken = PluginUtilities.getResourceFromContext(_context, "mapbox_access_token")
-        Mapbox.getInstance(_context, accessToken)
-
-        /*
-        var navViewOptions = NavigationViewOptions.builder();
-
-        navViewOptions.progressChangeListener { location, routeProgress ->
-            var currentState = routeProgress?.currentState()
-            _distanceRemaining =  routeProgress?.distanceRemaining();
-            _durationRemaining = routeProgress?.durationRemaining();
-
-            _eventSink?.success(currentState == RouteProgressState.ROUTE_ARRIVED);
-        }
-         */
-        
-        var locale: Locale = Locale("en")
-        
-        if(language != null)
-            locale =  Locale(language) 
-
-        var voiceUnits: String = DirectionsCriteria.IMPERIAL
         if(units != null)
         {
             if(units == "imperial")
-                voiceUnits = DirectionsCriteria.IMPERIAL
+                navigationVoiceUnits = DirectionsCriteria.IMPERIAL
             else if(units == "metric")
-                voiceUnits = DirectionsCriteria.METRIC
+                navigationVoiceUnits = DirectionsCriteria.METRIC
         }
-        var opt = NavigationRoute.builder(_context)
-                .accessToken(accessToken)
+
+        if(isMultiStop)
+        {
+
+            var wayPoints = arguments?.get("wayPoints") as HashMap<Int, Any>
+
+            val points: MutableList<Point> = mutableListOf()
+            for (item in wayPoints)
+            {
+                val point = item.value as HashMap<*, *>
+                val latitude = point["Latitude"] as Double
+                val longitude = point["Longitude"] as Double
+                points.add(Point.fromLngLat(latitude, longitude))
+            }
+
+            val navigationActivity = Intent(currentContext, WayPointsNavigationActivity::class.java)
+            navigationActivity.putExtra("waypoints", points as Serializable)
+            currentActivity?.startActivity(navigationActivity)//.putExtra("route", currentRoute))
+        }
+        else
+        {
+            var originName = arguments?.get("originName") as? String
+            val originLatitude = arguments?.get("originLatitude") as? Double
+            val originLongitude = arguments?.get("originLongitude") as? Double
+
+            val destinationName = arguments?.get("destinationName") as? String
+            val destinationLatitude = arguments?.get("destinationLatitude") as? Double
+            val destinationLongitude = arguments?.get("destinationLongitude") as? Double
+
+            if(originLatitude != null && originLongitude != null && destinationLatitude != null && destinationLongitude != null)
+            {
+
+                val o = Point.fromLngLat(originLongitude, originLatitude)
+                val d = Point.fromLngLat(destinationLongitude, destinationLatitude)
+
+                origin = o
+                destination = d
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    var haspermission = currentActivity?.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    if(haspermission != PackageManager.PERMISSION_GRANTED) {
+                        //_activity.onRequestPermissionsResult((a,b,c) => onRequestPermissionsResult)
+                        currentActivity?.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+                        startNavigation(o, d)
+                    }
+                    else
+                        startNavigation(o, d)
+                }
+                else
+                    startNavigation(o, d)
+
+
+            }
+        }
+
+    }
+
+    private fun startNavigation(origin: Point, destination: Point)
+    {
+
+        var opt = NavigationRoute.builder(currentContext)
+                .accessToken(Mapbox.getAccessToken()!!)
                 .origin(origin)
                 .destination(destination)
                 .profile(navigationMode)
-                .language(locale)
-                .voiceUnits(voiceUnits)
+                .language(navigationLanguage)
+                .voiceUnits(navigationVoiceUnits)
                 .build()
                 .getRoute(object : Callback<DirectionsResponse> {
                     override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
@@ -220,28 +228,18 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
                             if (!response.body()!!.routes().isEmpty()) {
                                 // Route fetched from NavigationRoute
                                 routes = response.body()!!.routes()
-/*
-                                var intent = Intent(_context, RouteMapActivity::class.java).apply{
-                                    putExtra(EXTRA_ROUTES, "Route Count")
-                                }
-
-                                _activity.startActivity(intent)
-
-                                return;
-                                
- */
-
-                                val route: DirectionsRoute = routes.get(0)
+                                currentRoute = routes.get(0)
 
                                 // Create a NavigationLauncherOptions object to package everything together
                                 val options = NavigationLauncherOptions.builder()
-                                        .directionsRoute(route)
+                                        .directionsRoute(currentRoute)
                                         .shouldSimulateRoute(simulateRoute)
                                         .build()
 
                                 // Call this method with Context from within an Activity
-                                MyNavigationLauncher.startNavigation(_activity, options)
-
+                                val navigationIntent = Intent(currentContext, NavigationActivity::class.java)
+                                navigationIntent.putExtra("route", currentRoute as Serializable)
+                                currentActivity?.startActivity(navigationIntent)
                             }
                         }
 
@@ -303,11 +301,11 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
     }
 */
     override fun onListen(args: Any?, events: EventChannel.EventSink?) {
-        _eventSink = events;
+        eventSink = events;
     }
 
     override fun onCancel(args: Any?) {
-        _eventSink = null;
+        eventSink = null;
     }
 
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -315,16 +313,15 @@ class FlutterMapboxNavigation : MethodChannel.MethodCallHandler, EventChannel.St
             367 -> {
 
                 for (permission in permissions) {
-                    if (permission == Manifest.permission.ACCESS_FINE_LOCATION)
-                    {
+                    if (permission == Manifest.permission.ACCESS_FINE_LOCATION) {
                         var haspermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            _activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                            currentActivity?.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                         } else {
                             TODO("VERSION.SDK_INT < M")
                         }
-                        if(haspermission == PackageManager.PERMISSION_GRANTED) {
-                            if(_origin != null && _destination != null)
-                                startNavigation(_origin!!, _destination!!, _simulateRoute, _language, _units)
+                        if (haspermission == PackageManager.PERMISSION_GRANTED) {
+                            if (origin != null && destination != null)
+                                startNavigation(origin!!, destination!!)
                         }
                         // Not all permissions granted. Show some message and return.
                         return

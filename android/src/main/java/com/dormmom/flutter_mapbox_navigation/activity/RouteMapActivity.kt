@@ -1,4 +1,4 @@
-package com.dormmom.flutter_mapbox_navigation
+package com.dormmom.flutter_mapbox_navigation.activity
 
 import android.app.Activity
 import android.app.Application
@@ -10,14 +10,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
+import com.dormmom.flutter_mapbox_navigation.CustomNavigationNotification
+import com.dormmom.flutter_mapbox_navigation.R
+import com.dormmom.flutter_mapbox_navigation.utilities.PluginUtilities
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineResult
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng

@@ -5,31 +5,76 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="040c80fd-187c-47c9-866a-867a3669b8e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/routeEvent.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/models/routeEvent.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/CustomNavigationNotification.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/NavigationActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/WayPointsNavigationActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/factory/FlutterMapViewFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/factory/MapViewFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxEvents.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxLocation.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxMileStone.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxRouteLeg.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxRouteProgressEvent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxRouteStep.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/utilities/MapUtilities.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/utilities/PluginUtilities.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/utilities/SimplifiedCallback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/res/layout/activity_navigation.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/res/values/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/CustomNavigationNotification.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/NavigationActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/WayPointsNavigationActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/factory/FlutterMapViewFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/factory/MapViewFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxEvents.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxLocation.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxMileStone.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxRouteLeg.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxRouteProgressEvent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/models/MapBoxRouteStep.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/utilities/MapUtilities.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/utilities/PluginUtilities.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/utilities/SimplifiedCallback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/layout/activity_navigation.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/values/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/values/styles.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/CustomNavigationNotification.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigationPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigationPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/PluginUtilities.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/RouteMapActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/RouteMapActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/launcher/MyMapboxNavigationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/MyMapboxNavigationActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/launcher/MyNavigationLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/MyNavigationLauncher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/res/layout/activity_routes_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/res/layout/activity_routes_map.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/example/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/kotlin/com/dormmom/flutter_mapbox_navigation_example/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/kotlin/com/dormmom/flutter_mapbox_navigation_example/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/values/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/CustomNavigationNotification.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigationPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/FlutterMapboxNavigationPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/PluginUtilities.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/RouteMapActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/RouteMapActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/launcher/MyMapboxNavigationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/MyMapboxNavigationActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/kotlin/com/dormmom/flutter_mapbox_navigation/launcher/MyNavigationLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/java/com/dormmom/flutter_mapbox_navigation/activity/MyNavigationLauncher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/layout/activity_routes_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/android/src/main/res/layout/activity_routes_map.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/android/app/src/main/kotlin/com/dormmom/flutter_mapbox_navigation_example/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/android/app/src/main/kotlin/com/dormmom/flutter_mapbox_navigation_example/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/ios/Classes/SwiftFlutterMapboxNavigationPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/ios/Classes/SwiftFlutterMapboxNavigationPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/flutter_mapbox_navigation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/flutter_mapbox_navigation.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/library.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/library.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/routeLeg.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/routeLeg.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/routeStep.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/routeStep.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/wayPoint.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mapbox_navigation/lib/models/wayPoint.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftFlutterMapboxNavigationPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftFlutterMapboxNavigationPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_mapbox_navigation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_mapbox_navigation.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/library.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/library.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/routeLeg.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/routeLeg.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/routeStep.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/routeStep.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/wayPoint.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/wayPoint.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,93 +133,93 @@
     <state width="484" height="342" key="DebuggerActiveHint/0.23.1680.975@0.23.1680.975" timestamp="1599166885497" />
     <state width="562" height="342" key="DebuggerActiveHint/0.23.1680.976@0.23.1680.976" timestamp="1599166436430" />
     <state width="438" height="466" key="DebuggerActiveHint/0.23.5120.1333@0.23.5120.1333" timestamp="1599018675930" />
-    <state width="1555" height="230" key="GridCell.Tab.0.bottom" timestamp="1599166799848">
-      <screen x="0" y="23" width="1680" height="976" />
+    <state width="1555" height="230" key="GridCell.Tab.0.bottom" timestamp="1600090861718">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.0.bottom/0.23.1680.974@0.23.1680.974" timestamp="1599158184125" />
-    <state width="1555" height="230" key="GridCell.Tab.0.bottom/0.23.1680.975@0.23.1680.975" timestamp="1599166640113" />
+    <state width="1555" height="230" key="GridCell.Tab.0.bottom/0.23.1680.975@0.23.1680.975" timestamp="1599166999712" />
     <state width="1555" height="230" key="GridCell.Tab.0.bottom/0.23.1680.976@0.23.1680.976" timestamp="1599166799848" />
     <state width="1702" height="273" key="GridCell.Tab.0.bottom/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022756" />
     <state width="1638" height="360" key="GridCell.Tab.0.bottom/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.bottom/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
     <state width="1638" height="251" key="GridCell.Tab.0.bottom/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905644" />
-    <state width="1555" height="230" key="GridCell.Tab.0.bottom/0.23.5120.1333@0.23.5120.1333" timestamp="1599081457911" />
+    <state width="1555" height="230" key="GridCell.Tab.0.bottom/0.23.5120.1333@0.23.5120.1333" timestamp="1600090861718" />
     <state width="1702" height="337" key="GridCell.Tab.0.bottom/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993125" />
-    <state width="1555" height="230" key="GridCell.Tab.0.center" timestamp="1599166799847">
-      <screen x="0" y="23" width="1680" height="976" />
+    <state width="1555" height="230" key="GridCell.Tab.0.center" timestamp="1600090861718">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.0.center/0.23.1680.974@0.23.1680.974" timestamp="1599158184124" />
-    <state width="1555" height="230" key="GridCell.Tab.0.center/0.23.1680.975@0.23.1680.975" timestamp="1599166640112" />
+    <state width="1555" height="230" key="GridCell.Tab.0.center/0.23.1680.975@0.23.1680.975" timestamp="1599166999712" />
     <state width="1555" height="230" key="GridCell.Tab.0.center/0.23.1680.976@0.23.1680.976" timestamp="1599166799847" />
     <state width="1702" height="273" key="GridCell.Tab.0.center/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022756" />
     <state width="1638" height="360" key="GridCell.Tab.0.center/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.center/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889798" />
     <state width="1638" height="251" key="GridCell.Tab.0.center/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905644" />
-    <state width="1555" height="230" key="GridCell.Tab.0.center/0.23.5120.1333@0.23.5120.1333" timestamp="1599081457911" />
+    <state width="1555" height="230" key="GridCell.Tab.0.center/0.23.5120.1333@0.23.5120.1333" timestamp="1600090861718" />
     <state width="1702" height="337" key="GridCell.Tab.0.center/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993124" />
-    <state width="1555" height="230" key="GridCell.Tab.0.left" timestamp="1599166799847">
-      <screen x="0" y="23" width="1680" height="976" />
+    <state width="1555" height="230" key="GridCell.Tab.0.left" timestamp="1600090861717">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.0.left/0.23.1680.974@0.23.1680.974" timestamp="1599158184124" />
-    <state width="1555" height="230" key="GridCell.Tab.0.left/0.23.1680.975@0.23.1680.975" timestamp="1599166640112" />
+    <state width="1555" height="230" key="GridCell.Tab.0.left/0.23.1680.975@0.23.1680.975" timestamp="1599166999711" />
     <state width="1555" height="230" key="GridCell.Tab.0.left/0.23.1680.976@0.23.1680.976" timestamp="1599166799847" />
     <state width="1702" height="273" key="GridCell.Tab.0.left/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022755" />
     <state width="1638" height="360" key="GridCell.Tab.0.left/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.left/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889798" />
     <state width="1638" height="251" key="GridCell.Tab.0.left/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905643" />
-    <state width="1555" height="230" key="GridCell.Tab.0.left/0.23.5120.1333@0.23.5120.1333" timestamp="1599081457910" />
+    <state width="1555" height="230" key="GridCell.Tab.0.left/0.23.5120.1333@0.23.5120.1333" timestamp="1600090861717" />
     <state width="1702" height="337" key="GridCell.Tab.0.left/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993124" />
-    <state width="1555" height="230" key="GridCell.Tab.0.right" timestamp="1599166799847">
-      <screen x="0" y="23" width="1680" height="976" />
+    <state width="1555" height="230" key="GridCell.Tab.0.right" timestamp="1600090861718">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.0.right/0.23.1680.974@0.23.1680.974" timestamp="1599158184124" />
-    <state width="1555" height="230" key="GridCell.Tab.0.right/0.23.1680.975@0.23.1680.975" timestamp="1599166640113" />
+    <state width="1555" height="230" key="GridCell.Tab.0.right/0.23.1680.975@0.23.1680.975" timestamp="1599166999712" />
     <state width="1555" height="230" key="GridCell.Tab.0.right/0.23.1680.976@0.23.1680.976" timestamp="1599166799847" />
     <state width="1702" height="273" key="GridCell.Tab.0.right/0.23.2560.1337@0.23.2560.1337" timestamp="1593732022756" />
     <state width="1638" height="360" key="GridCell.Tab.0.right/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293272" />
     <state width="1638" height="360" key="GridCell.Tab.0.right/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889798" />
     <state width="1638" height="251" key="GridCell.Tab.0.right/0.23.2560.1342@0.23.2560.1342" timestamp="1593771905644" />
-    <state width="1555" height="230" key="GridCell.Tab.0.right/0.23.5120.1333@0.23.5120.1333" timestamp="1599081457911" />
+    <state width="1555" height="230" key="GridCell.Tab.0.right/0.23.5120.1333@0.23.5120.1333" timestamp="1600090861718" />
     <state width="1702" height="337" key="GridCell.Tab.0.right/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993124" />
-    <state width="1555" height="230" key="GridCell.Tab.1.bottom" timestamp="1599166849112">
-      <screen x="0" y="23" width="1680" height="975" />
+    <state width="1555" height="230" key="GridCell.Tab.1.bottom" timestamp="1599233949627">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.1.bottom/0.23.1680.974@0.23.1680.974" timestamp="1599158184059" />
-    <state width="1555" height="230" key="GridCell.Tab.1.bottom/0.23.1680.975@0.23.1680.975" timestamp="1599166849112" />
+    <state width="1555" height="230" key="GridCell.Tab.1.bottom/0.23.1680.975@0.23.1680.975" timestamp="1599166999714" />
     <state width="1555" height="230" key="GridCell.Tab.1.bottom/0.23.1680.976@0.23.1680.976" timestamp="1599166799759" />
     <state width="1638" height="360" key="GridCell.Tab.1.bottom/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.bottom/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
-    <state width="1555" height="230" key="GridCell.Tab.1.bottom/0.23.5120.1333@0.23.5120.1333" timestamp="1599081591071" />
+    <state width="1555" height="230" key="GridCell.Tab.1.bottom/0.23.5120.1333@0.23.5120.1333" timestamp="1599233949627" />
     <state width="1702" height="337" key="GridCell.Tab.1.bottom/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993126" />
-    <state width="1555" height="230" key="GridCell.Tab.1.center" timestamp="1599166849112">
-      <screen x="0" y="23" width="1680" height="975" />
+    <state width="1555" height="230" key="GridCell.Tab.1.center" timestamp="1599233949627">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.1.center/0.23.1680.974@0.23.1680.974" timestamp="1599158184058" />
-    <state width="1555" height="230" key="GridCell.Tab.1.center/0.23.1680.975@0.23.1680.975" timestamp="1599166849112" />
+    <state width="1555" height="230" key="GridCell.Tab.1.center/0.23.1680.975@0.23.1680.975" timestamp="1599166999713" />
     <state width="1555" height="230" key="GridCell.Tab.1.center/0.23.1680.976@0.23.1680.976" timestamp="1599166799758" />
     <state width="1638" height="360" key="GridCell.Tab.1.center/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.center/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
-    <state width="1555" height="230" key="GridCell.Tab.1.center/0.23.5120.1333@0.23.5120.1333" timestamp="1599081591071" />
+    <state width="1555" height="230" key="GridCell.Tab.1.center/0.23.5120.1333@0.23.5120.1333" timestamp="1599233949627" />
     <state width="1702" height="337" key="GridCell.Tab.1.center/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993125" />
-    <state width="1555" height="230" key="GridCell.Tab.1.left" timestamp="1599166849111">
-      <screen x="0" y="23" width="1680" height="975" />
+    <state width="1555" height="230" key="GridCell.Tab.1.left" timestamp="1599233949626">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.1.left/0.23.1680.974@0.23.1680.974" timestamp="1599158184058" />
-    <state width="1555" height="230" key="GridCell.Tab.1.left/0.23.1680.975@0.23.1680.975" timestamp="1599166849111" />
+    <state width="1555" height="230" key="GridCell.Tab.1.left/0.23.1680.975@0.23.1680.975" timestamp="1599166999713" />
     <state width="1555" height="230" key="GridCell.Tab.1.left/0.23.1680.976@0.23.1680.976" timestamp="1599166799758" />
     <state width="1638" height="360" key="GridCell.Tab.1.left/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.left/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
-    <state width="1555" height="230" key="GridCell.Tab.1.left/0.23.5120.1333@0.23.5120.1333" timestamp="1599081591071" />
+    <state width="1555" height="230" key="GridCell.Tab.1.left/0.23.5120.1333@0.23.5120.1333" timestamp="1599233949626" />
     <state width="1702" height="337" key="GridCell.Tab.1.left/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993125" />
-    <state width="1555" height="230" key="GridCell.Tab.1.right" timestamp="1599166849112">
-      <screen x="0" y="23" width="1680" height="975" />
+    <state width="1555" height="230" key="GridCell.Tab.1.right" timestamp="1599233949627">
+      <screen x="0" y="23" width="5120" height="1333" />
     </state>
     <state width="1555" height="230" key="GridCell.Tab.1.right/0.23.1680.974@0.23.1680.974" timestamp="1599158184058" />
-    <state width="1555" height="230" key="GridCell.Tab.1.right/0.23.1680.975@0.23.1680.975" timestamp="1599166849112" />
+    <state width="1555" height="230" key="GridCell.Tab.1.right/0.23.1680.975@0.23.1680.975" timestamp="1599166999713" />
     <state width="1555" height="230" key="GridCell.Tab.1.right/0.23.1680.976@0.23.1680.976" timestamp="1599166799759" />
     <state width="1638" height="360" key="GridCell.Tab.1.right/0.23.2560.1338@0.23.2560.1338" timestamp="1593802293273" />
     <state width="1638" height="360" key="GridCell.Tab.1.right/0.23.2560.1340@0.23.2560.1340" timestamp="1593802889799" />
-    <state width="1555" height="230" key="GridCell.Tab.1.right/0.23.5120.1333@0.23.5120.1333" timestamp="1599081591071" />
+    <state width="1555" height="230" key="GridCell.Tab.1.right/0.23.5120.1333@0.23.5120.1333" timestamp="1599233949627" />
     <state width="1702" height="337" key="GridCell.Tab.1.right/0.23.5120.1337@0.23.5120.1337" timestamp="1593729993126" />
     <state width="932" height="585" key="XDebugger.FullValuePopup" timestamp="1599081280264">
       <screen x="0" y="23" width="5120" height="1333" />

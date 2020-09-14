@@ -1,4 +1,4 @@
-package com.dormmom.flutter_mapbox_navigation.launcher;
+package com.dormmom.flutter_mapbox_navigation.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,5 +30,6 @@ public class MyMapboxNavigationActivity extends MapboxNavigationActivity {
         super.onDestroy();
         unregisterReceiver(receiver);
     }
-}
 
+
+}
